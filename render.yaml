@@ -1,0 +1,37 @@
+# Render Blueprint — Deploy both frontend + backend in one project
+# How to use:
+#   1. Go to https://dashboard.render.com/blueprints
+#   2. Connect your GitHub repo (Nanditha-29/InsightFlow or RANGAHARISH/InsightFlow)
+#   3. Render auto-detects this file and creates both services
+#   4. Set GROQ_API_KEY in the backend service's environment variables
+
+services:
+  # ─── Backend: FastAPI / Python ───
+  - type: web
+    name: insightflow-backend
+    env: python
+    region: oregon
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: GROQ_API_KEY
+        sync: false  # Set manually in Render dashboard
+      - key: DEBUG
+        value: "false"
+
+  # ─── Frontend: Next.js ───
+  - type: web
+    name: insightflow-frontend
+    env: node
+    region: oregon
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # After deploy: set API_URL to https://insightflow-backend.onrender.com
+      - key: API_URL
+        value: ""
