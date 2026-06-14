@@ -10,7 +10,16 @@ const nextConfig = {
         },
       ];
     }
-    // In production (Vercel), API is at the same domain via Python serverless functions
+    // In production, the backend URL comes from environment variable
+    const apiUrl = process.env.API_URL;
+    if (apiUrl) {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${apiUrl}/api/:path*`,
+        },
+      ];
+    }
     return [];
   },
   env: {
