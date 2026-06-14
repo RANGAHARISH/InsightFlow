@@ -13,6 +13,9 @@ const nextConfig = {
     // In production (Vercel), API is at the same domain via Python serverless functions
     return [];
   },
+  env: {
+    NEXT_PUBLIC_API_URL: process.env.NEXT_PUBLIC_API_URL || '',
+  },
 };
 
 module.exports = nextConfig;
