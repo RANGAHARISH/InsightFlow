@@ -2,16 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   output: 'standalone',
+  // Production: proxy /api/* to the backend via API_URL env var
   async rewrites() {
-    if (process.env.NODE_ENV === 'development') {
-      return [
-        {
-          source: '/api/:path*',
-          destination: 'http://localhost:8000/api/:path*',
-        },
-      ];
-    }
-    // In production, the backend URL comes from environment variable
     const apiUrl = process.env.API_URL;
     if (apiUrl) {
       return [
